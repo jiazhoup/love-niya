@@ -18,13 +18,18 @@
     background-color: #fdf5f6; /* soft romantic pink */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
+    overflow: hidden; /* Prevents scrollbars if the card slightly shifts */
   }
 
   .card-container {
     position: relative;
-    width: 750px;   /* Significantly increased width */
-    height: 1250px;  /* Significantly increased height */
-    perspective: 2500px; /* Increased perspective for a larger object */
+    /* Responsive sizing logic */
+    width: 90vw;
+    max-width: 500px;
+    max-height: 80vh;
+    aspect-ratio: 2 / 3; /* Maintains the card shape perfectly */
+    
+    perspective: 2500px;
     cursor: pointer;
   }
 
@@ -46,7 +51,7 @@
   .bottom-half img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Prevents cropping, fits image entirely */
+    object-fit: contain;
   }
 
   /* The top half of the card (Animates/Folds) */
@@ -95,7 +100,7 @@
   .face img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Prevents cropping, fits image entirely */
+    object-fit: contain;
   }
 
   /* Inside Top (B.png) */
@@ -106,11 +111,10 @@
   /* Cover (A.png) */
   .back {
     transform: rotateX(180deg);
-    /* Adding subtle border and shadow to the cover */
     border: 1px solid #f0eaeb;
   }
   
-  /* Fallback text styling if images are missing */
+  /* Fallback text styling */
   .placeholder {
     display: flex;
     justify-content: center;
@@ -120,18 +124,20 @@
     background: #ffeef0;
     color: #d18290;
     font-weight: bold;
-    font-size: 1.5rem;
+    /* Scales font size smoothly based on screen width */
+    font-size: clamp(1rem, 3vw, 1.5rem);
     text-align: center;
     padding: 20px;
   }
 
   .instruction {
     position: absolute;
-    bottom: -60px;
+    /* Positions text slightly below the card, adapting to screen size */
+    bottom: min(-40px, -8%); 
     width: 100%;
     text-align: center;
     color: #a08488;
-    font-size: 18px;
+    font-size: clamp(14px, 4vw, 18px);
     letter-spacing: 0.5px;
     pointer-events: none;
     opacity: 0.8;
@@ -142,27 +148,21 @@
 
 <div class="card-container" id="card" onclick="toggleCard()">
   
-  <!-- Stationary Bottom Half -->
   <div class="bottom-half">
     <img src="images/C.png" alt="Bottom Inside" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
     <div class="placeholder" style="display:none;">Bottom Inside<br>(images/C.png)</div>
   </div>
   
-  <!-- Animated Top Half -->
   <div class="top-half">
-    
-    <!-- Inside Top (Front Face of the 3D plane) -->
     <div class="face front">
       <img src="images/B.png" alt="Top Inside" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="placeholder" style="display:none;">Top Inside<br>(images/B.png)</div>
     </div>
     
-    <!-- Cover (Back Face of the 3D plane) -->
     <div class="face back">
       <img src="images/A.png" alt="Cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="placeholder" style="display:none;">Cover<br>(images/A.png)</div>
     </div>
-    
   </div>
   
   <div class="instruction">Click to Open/Close 💌</div>
