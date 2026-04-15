@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Love Card</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #fdf5f6; /* soft romantic pink */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+  }
+
+  .card-container {
+    position: relative;
+    width: 750px;   /* Significantly increased width */
+    height: 1250px;  /* Significantly increased height */
+    perspective: 2500px; /* Increased perspective for a larger object */
+    cursor: pointer;
+  }
+
+  /* The bottom half of the card (Inside Bottom - C.png) */
+  .bottom-half {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    background-color: #fff;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .bottom-half img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Prevents cropping, fits image entirely */
+  }
+
+  /* The top half of the card (Animates/Folds) */
+  .top-half {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50%;
+    transform-origin: bottom center;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+    
+    /* Start in closed position (folded down over the bottom half) */
+    transform: rotateX(-180deg);
+    z-index: 10;
+  }
+  
+  /* When the card is clicked and opened */
+  .card-container.open .top-half {
+    transform: rotateX(0deg);
+  }
+  
+  /* Adds a shadow behind the top half when open */
+  .card-container.open .top-half::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 -15px 35px rgba(0,0,0,0.15);
+    border-radius: 16px 16px 0 0;
+    z-index: -1;
+  }
+
+  .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background-color: #fff;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .face img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Prevents cropping, fits image entirely */
+  }
+
+  /* Inside Top (B.png) */
+  .front {
+    transform: rotateX(0deg);
+  }
+
+  /* Cover (A.png) */
+  .back {
+    transform: rotateX(180deg);
+    /* Adding subtle border and shadow to the cover */
+    border: 1px solid #f0eaeb;
+  }
+  
+  /* Fallback text styling if images are missing */
+  .placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background: #ffeef0;
+    color: #d18290;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .instruction {
+    position: absolute;
+    bottom: -60px;
+    width: 100%;
+    text-align: center;
+    color: #a08488;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+
+<div class="card-container" id="card" onclick="toggleCard()">
+  
+  <!-- Stationary Bottom Half -->
+  <div class="bottom-half">
+    <img src="images/C.png" alt="Bottom Inside" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="placeholder" style="display:none;">Bottom Inside<br>(images/C.png)</div>
+  </div>
+  
+  <!-- Animated Top Half -->
+  <div class="top-half">
+    
+    <!-- Inside Top (Front Face of the 3D plane) -->
+    <div class="face front">
+      <img src="images/B.png" alt="Top Inside" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">Top Inside<br>(images/B.png)</div>
+    </div>
+    
+    <!-- Cover (Back Face of the 3D plane) -->
+    <div class="face back">
+      <img src="images/A.png" alt="Cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">Cover<br>(images/A.png)</div>
+    </div>
+    
+  </div>
+  
+  <div class="instruction">Click to Open/Close 💌</div>
+</div>
+
+<script>
+  function toggleCard() {
+    const card = document.getElementById('card');
+    card.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
